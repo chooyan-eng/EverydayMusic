@@ -10,8 +10,19 @@ class QuestionBloc extends ChangeNotifier {
   final soundKeyList = <NoteKind, int>{};
   double panDownY = -1;
   int initialIndex = -1;
+  bool _isPlaying = false;
   final pool = Soundpool(streamType: StreamType.notification);
 
+  bool get isAnswerable {
+    return noteList.every((element) => element.currentKind != null) && !isPlaying;
+  }
+
+  bool get isPlaying => _isPlaying;
+  set isPlaying(bool value) {
+    _isPlaying = value;
+    notifyListeners();
+  }
+  
   Future<void> reset(List<Note> notes) async {
     noteList.clear();
     noteList.addAll(notes);
@@ -38,7 +49,17 @@ class QuestionBloc extends ChangeNotifier {
   }
 
   Future<void> soundCurrent(int index) async {
-    await pool.play(soundKeyList[noteList[index].currentKind]);
+    await pool.play(soundKeyList[noteList[index].currentKind], rate: 1.4);
+  }
+
+  Future<void> soundAll() async {
+    isPlaying = true;
+    for (final note in noteList) {
+      await pool.play(soundKeyList[note.currentKind], rate: 1.4);
+      updateState(noteList.indexOf(note));
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+    isPlaying = false;
   }
 
   void updateState(int index) {

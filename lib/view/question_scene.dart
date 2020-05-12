@@ -7,18 +7,11 @@ import 'package:provider/provider.dart';
 class QuestionScene extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: ChangeNotifierProvider(
-        create: (context) => QuestionBloc()..reset([
-          Note(correctKind: NoteKind.upperC, currentKind: null),
-          Note(correctKind: NoteKind.c, currentKind: null),
-          Note(correctKind: NoteKind.d, currentKind: null),
-          Note(correctKind: NoteKind.f, currentKind: null),
-          Note(correctKind: NoteKind.a, currentKind: null),
-        ]),
-        child: QuestionPage(),
+    return ChangeNotifierProvider(
+      create: (context) => QuestionBloc()..reset(
+        List.generate(8, (index) => Note.random()),
       ),
+      child: QuestionPage(),
     );
   }
 }

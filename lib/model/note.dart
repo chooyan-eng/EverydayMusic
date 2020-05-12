@@ -1,3 +1,5 @@
+import 'dart:math';
+
 enum NoteKind {
   c,
   d,
@@ -22,11 +24,11 @@ extension NoteKindLetter on NoteKind {
     NoteKind.g: 'そ',
     NoteKind.a: 'ら',
     NoteKind.h: 'し',
-    NoteKind.upperC: 'ど',
-    NoteKind.upperD: 'れ',
-    NoteKind.upperE: 'み',
-    NoteKind.upperF: 'ふぁ',
-    NoteKind.upperG: 'そ',
+    NoteKind.upperC: 'ど↑',
+    NoteKind.upperD: 'れ↑',
+    NoteKind.upperE: 'み↑',
+    NoteKind.upperF: 'ふぁ↑',
+    NoteKind.upperG: 'そ↑',
   }[this];
 
   String toKatakana() => <NoteKind, String>{
@@ -37,11 +39,11 @@ extension NoteKindLetter on NoteKind {
     NoteKind.g: 'ソ',
     NoteKind.a: 'ラ',
     NoteKind.h: 'シ',
-    NoteKind.upperC: 'ど',
-    NoteKind.upperD: 'れ',
-    NoteKind.upperE: 'み',
-    NoteKind.upperF: 'ふぁ',
-    NoteKind.upperG: 'そ',
+    NoteKind.upperC: 'ド↑',
+    NoteKind.upperD: 'レ↑',
+    NoteKind.upperE: 'ミ↑',
+    NoteKind.upperF: 'ファ↑',
+    NoteKind.upperG: 'ソ↑',
   }[this];
 }
 
@@ -74,4 +76,10 @@ class Note {
     this.isCorrect = false,
     this.hasError = false,
   });
+
+  factory Note.random() {
+    return Note(
+      correctKind: NoteKind.values[Random().nextInt(NoteKind.values.length - 1)],
+    );
+  }
 }
