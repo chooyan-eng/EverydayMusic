@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:music_everyday/view/question_scene.dart';
-import 'package:music_everyday/view/top_page.dart';
 
 void main() {
   runApp(MyApp());

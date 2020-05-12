@@ -6,7 +6,7 @@ import 'package:music_everyday/model/note.dart';
 import 'package:music_everyday/view/widget/line.dart';
 import 'package:provider/provider.dart';
 
-class TopPage extends StatelessWidget {
+class QuestionPage extends StatelessWidget {
   final lineHeight = 24.0;
   final onpuHeight = 96.0;
   final startLeft = 120.0;
@@ -63,17 +63,25 @@ class TopPage extends StatelessWidget {
                                   if (bloc.noteList[index].currentKind == null) {
                                     bloc.updateCurrentKind(index, NoteKind.e);
                                   }
+                                  bloc.noteList[index].hasError = false;
+                                  bloc.noteList[index].isCorrect = false;
                                   bloc.panDownY = details.localPosition.dy;
                                   bloc.initialIndex = NoteKind.values.indexOf(bloc.noteList[index].currentKind);
                                 },
-                                onPanUpdate: (details) {
-                                  bloc.updateDy(index, details.localPosition.dy);
+                                onPanUpdate: (details) => bloc.updateDy(index, details.localPosition.dy),
+                                onPanEnd: (details) {
+                                  bloc.updateState(index);
+                                  bloc.soundCurrent(index);
                                 },
                                 child: Transform.rotate(
                                   angle: NoteKind.values.indexOf(bloc.noteList[index].currentKind ?? NoteKind.e) >= 6 ? pi : 0,
                                   child: Opacity(
                                     opacity: bloc.noteList[index].currentKind == null ? 0.1 : 1.0,
-                                    child: Image.asset(bloc.noteList[index].currentKind == NoteKind.c ? 'assets/images/onpu_do.png' : 'assets/images/onpu.png', height: onpuHeight),
+                                    child: Image.asset(
+                                      bloc.noteList[index].currentKind == NoteKind.c ? 'assets/images/onpu_do.png' : 'assets/images/onpu.png', 
+                                      height: onpuHeight,
+                                      color: bloc.noteList[index].hasError ? Colors.red.shade400 : bloc.noteList[index].isCorrect ? Colors.blue.shade400 : null,
+                                    ),
                                   ),
                                 ),
                               ),
