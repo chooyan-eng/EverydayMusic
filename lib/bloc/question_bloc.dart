@@ -11,6 +11,7 @@ class QuestionBloc extends ChangeNotifier {
   double panDownY = -1;
   int initialIndex = -1;
   bool _isPlaying = false;
+  int _focusIndex = -1;
   final pool = Soundpool(streamType: StreamType.notification);
 
   bool get isAnswerable {
@@ -20,6 +21,12 @@ class QuestionBloc extends ChangeNotifier {
   bool get isPlaying => _isPlaying;
   set isPlaying(bool value) {
     _isPlaying = value;
+    notifyListeners();
+  }
+
+  int get focusIndex => _focusIndex;
+  set focusIndex(int value) {
+    _focusIndex = value;
     notifyListeners();
   }
   
@@ -52,13 +59,37 @@ class QuestionBloc extends ChangeNotifier {
     await pool.play(soundKeyList[noteList[index].currentKind], rate: 1.4);
   }
 
-  Future<void> soundAll() async {
+  Future<void> soundCorrect(int index) async {
+    await pool.play(soundKeyList[noteList[index].correctKind], rate: 1.4);
+  }
+
+  Future<void> soundAll({bool shouldUpdateState = false, bool shouldUpdateFocus = false}) async {
     isPlaying = true;
     for (final note in noteList) {
+      if (shouldUpdateFocus) {
+        focusIndex = noteList.indexOf(note);
+      }
       await pool.play(soundKeyList[note.currentKind], rate: 1.4);
-      updateState(noteList.indexOf(note));
+      if (shouldUpdateState) {
+        updateState(noteList.indexOf(note));
+      }
       await Future.delayed(const Duration(milliseconds: 500));
     }
+    focusIndex = -1;
+    isPlaying = false;
+  }
+
+  Future<void> soundAllCorrect({bool shouldUpdateState = false}) async {
+    isPlaying = true;
+    for (final note in noteList) {
+      focusIndex = noteList.indexOf(note);
+      await pool.play(soundKeyList[note.correctKind], rate: 1.4);
+      if (shouldUpdateState) {
+        updateState(focusIndex);
+      }
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+    focusIndex = -1;
     isPlaying = false;
   }
 

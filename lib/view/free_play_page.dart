@@ -5,15 +5,14 @@ import 'package:music_everyday/view/widget/movable_note.dart';
 import 'package:music_everyday/view/widget/staff_notation.dart';
 import 'package:provider/provider.dart';
 
-class QuestionPage extends StatelessWidget {
-
+class FreePlayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<QuestionBloc>(
       builder: (context, bloc, child) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('おんぷえらび'),
+            title: Text('じゆうにならべる'),
           ),
           body: Stack(
             children: <Widget>[
@@ -65,7 +64,20 @@ class QuestionPage extends StatelessWidget {
                               return [
                                 Container(
                                   width: 72,
-                                  child: Center(child: Text(bloc.noteList[index].correctKind.toKatakana(), style: TextStyle(fontSize: 24))),
+                                  child: Center(
+                                    child: InkWell(
+                                      onTap: () => bloc.soundCurrent(index),
+                                      child: Center(
+                                        child: Text(
+                                          bloc.noteList[index].currentKind?.toKatakana() ?? '', 
+                                          style: TextStyle(
+                                            color: bloc.focusIndex == index ? Colors.amber : null,
+                                            fontSize: bloc.focusIndex == index ? 32 : 24,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(width: 8),
                               ];
@@ -83,7 +95,7 @@ class QuestionPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8),
             child: FloatingActionButton.extended(
               onPressed: bloc.isAnswerable ? () async {
-                await bloc.soundAll(shouldUpdateState: true);
+                await bloc.soundAll(shouldUpdateFocus: true);
                 if (bloc.noteList.every((element) => element.isCorrect)) {
                   await Future.delayed(const Duration(milliseconds: 300));
                   bloc.reset(
@@ -93,12 +105,16 @@ class QuestionPage extends StatelessWidget {
               } : null,
               label: Center(
                 child: Container(
-                  width: 100,
-                  child: Text('こたえあわせ', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  width: 120,
+                  child: Text(
+                    'ならしてみる', 
+                    textAlign: TextAlign.center, 
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-              icon: Icon(Icons.check, color: Colors.white),
-              backgroundColor: bloc.isAnswerable ? Colors.green : Colors.grey,
+              icon: Icon(bloc.isAnswerable ? Icons.check : Icons.music_note, color: Colors.white),
+              backgroundColor: bloc.isAnswerable ? Colors.amber : Colors.grey,
             ),
           ),
         );

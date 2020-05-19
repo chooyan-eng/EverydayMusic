@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:music_everyday/view/free_play_scene.dart';
+import 'package:music_everyday/view/listen_sound_scene.dart';
 import 'package:music_everyday/view/question_scene.dart';
 
 class SelectModePage extends StatelessWidget {
@@ -9,10 +11,10 @@ class SelectModePage extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(builder: (context) => QuestionScene()));
         break;
       case 1: 
-        Navigator.push(context, MaterialPageRoute(builder: (context) => QuestionScene()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ListenSoundScene()));
         break;
       case 2: 
-        Navigator.push(context, MaterialPageRoute(builder: (context) => QuestionScene()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => FreePlayScene()));
         break;
     }
   }
@@ -45,7 +47,7 @@ class SelectModePage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: _buildLevelSelect('おとえらび', Colors.blue, () => _navigateToQuiz(context, 1)),
+                child: _buildLevelSelect('おとあて', Colors.lightGreen, () => _navigateToQuiz(context, 1)),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -56,7 +58,7 @@ class SelectModePage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: _buildLevelSelect('おとあて', Colors.lightGreen, () => _navigateToQuiz(context, 2)),
+                child: _buildLevelSelect('じゆうにならべる', Colors.blue, () => _navigateToQuiz(context, 2)),
               ),
             ],
           ),

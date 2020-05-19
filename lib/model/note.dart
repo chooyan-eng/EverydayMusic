@@ -15,6 +15,10 @@ enum NoteKind {
   upperG,
 }
 
+extension NoteKindIndex on NoteKind {
+  int get index => NoteKind.values.indexOf(this);
+}
+
 extension NoteKindLetter on NoteKind {
   String toHiragana() => <NoteKind, String>{
     NoteKind.c: 'ど',
