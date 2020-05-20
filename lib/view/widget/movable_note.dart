@@ -29,20 +29,26 @@ class MovableNote extends StatelessWidget {
         onPanDown: onPanDown,
         onPanUpdate: onPanUpdate,
         onPanEnd: onPanEnd,
-        child: Transform.rotate(
-          angle: NoteKind.values.indexOf(note.currentKind ?? NoteKind.e) >= 6
-              ? pi
-              : 0,
-          child: Opacity(
-            opacity: note.currentKind == null ? 0.1 : 1.0,
-            child: Image.asset(
-              note.currentKind == NoteKind.c
-                  ? 'assets/images/onpu_do.png'
-                  : 'assets/images/onpu.png',
-              height: Constants.onpuHeight,
-              color: note.hasError
-                  ? Colors.red.shade400
-                  : note.isCorrect ? Colors.blue.shade400 : null,
+        child: Container(
+          color: Colors.blue.withAlpha(0),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Transform.rotate(
+              angle: NoteKind.values.indexOf(note.currentKind ?? NoteKind.e) >= 6
+                  ? pi
+                  : 0,
+              child: Opacity(
+                opacity: note.currentKind == null ? 0.1 : 1.0,
+                child: Image.asset(
+                  note.currentKind == NoteKind.c
+                      ? 'assets/images/onpu_do.png'
+                      : 'assets/images/onpu.png',
+                  height: Constants.onpuHeight,
+                  color: note.hasError
+                      ? Colors.red.shade400
+                      : note.isCorrect ? Colors.blue.shade400 : null,
+                ),
+              ),
             ),
           ),
         ),
